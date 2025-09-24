@@ -1,7 +1,8 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import joblib
+import joblib, fitz
 from werkzeug.utils import secure_filename
+from docx import Document
 import os
 
 # === Flask app ===
@@ -18,11 +19,25 @@ def get_svm_model():
 
 # === Utility to read text ===
 def extract_text(file):
-    ext = file.filename.split('.')[-1].lower()
-    if ext == "txt":
-        return file.read().decode("utf-8", errors="ignore")
-    else:
-        raise ValueError("Only TXT files are supported for AI detection.")
+    filename = secure_filename(file.filename)
+    ext = os.path.splitext(filename)[1].lower()
+
+    try:
+        if ext == ".txt":
+            return file.read().decode("utf-8", errors="ignore")
+        elif ext == ".pdf":
+            text = ""
+            pdf = fitz.open(stream=file.read(), filetype="pdf")
+            for page in pdf:
+                text += page.get_text()
+            return text
+        elif ext == ".docx":
+            doc = Document(file)
+            return "\n".join(p.text for p in doc.paragraphs)
+        else:
+            raise ValueError("Unsupported file type")
+    except Exception as e:
+        raise ValueError(f"Error reading file: {e}")
 
 # === Routes ===
 @app.route("/detect-ai", methods=["POST"])
