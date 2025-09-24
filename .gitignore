@@ -1,0 +1,51 @@
+# ==================
+# Python backend
+# ==================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+*.log
+*.env
+.env/
+.env.*
+.venv/
+venv/
+ENV/
+build/
+dist/
+*.egg-info/
+
+# HuggingFace / ML cache
+*.cache/
+huggingface/
+datasets/
+*.pth
+*.pt
+*.ckpt
+
+# ==================
+# Node/React frontend
+# ==================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+.pnpm-debug.log*
+
+# React build
+frontend/build/
+frontend/.cache/
+*.tsbuildinfo
+
+# ==================
+# OS / IDE / Misc
+# ==================
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.iml
